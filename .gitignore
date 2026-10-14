@@ -1,0 +1,11 @@
+# simulation outputs (hundreds of MB per run); rebuild them with `h2a.py build` / the GUI
+runs/
+
+# machine-specific: created with defaults on first use, then edit the ARTEMIS paths
+h2a_config.json
+*.lnk
+
+# AEDT / Python leftovers
+batch.log
+__pycache__/
+*.pyc

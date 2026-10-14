@@ -1,0 +1,30 @@
+diff --git a/Src/Base/AMReX_Random.cpp b/Src/Base/AMReX_Random.cpp
+index e57467ffa..079f35357 100644
+--- a/Src/Base/AMReX_Random.cpp
++++ b/Src/Base/AMReX_Random.cpp
+@@ -65,10 +65,21 @@ void ResizeRandomSeed (amrex::ULong gpu_seed)
+     });
+ 
+ #if defined(AMREX_USE_CUDA)
+-    AMREX_CURAND_SAFE_CALL(curandCreateGenerator
+-                           (&gpu_rand_generator, CURAND_RNG_PSEUDO_DEFAULT));
+-    AMREX_CURAND_SAFE_CALL(curandSetPseudoRandomGeneratorSeed
+-                           (gpu_rand_generator, gpu_seed+1234ULL));
++    // LOCAL PATCH (WSL2): curandCreateGenerator returns 203 here under WSL2 + CUDA 12.4 /
++    // driver 13.x. The host-API generator is only used by FillRandom/FillRandomNormal,
++    // which ARTEMIS never calls, so warn instead of aborting. Those calls still abort
++    // (CURAND_STATUS_NOT_INITIALIZED) if anything ever uses the null generator.
++    {
++        curandStatus_t s = curandCreateGenerator(&gpu_rand_generator, CURAND_RNG_PSEUDO_DEFAULT);
++        if (s == CURAND_STATUS_SUCCESS) {
++            AMREX_CURAND_SAFE_CALL(curandSetPseudoRandomGeneratorSeed
++                                   (gpu_rand_generator, gpu_seed+1234ULL));
++        } else {
++            gpu_rand_generator = nullptr;
++            amrex::Print() << "WARNING: curandCreateGenerator failed (status " << static_cast<int>(s)
++                           << "); amrex::FillRandom on GPU is unavailable.\n";
++        }
++    }
+ #else
+     AMREX_HIPRAND_SAFE_CALL(hiprandCreateGenerator
+                             (&gpu_rand_generator, HIPRAND_RNG_PSEUDO_DEFAULT));

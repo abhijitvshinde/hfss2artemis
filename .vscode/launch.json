@@ -1,0 +1,51 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "h2a: status of latest run",
+      "type": "debugpy", "request": "launch", "console": "integratedTerminal",
+      "program": "${workspaceFolder}/h2a.py", "args": ["status"], "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "h2a: watch latest run (refresh every minute)",
+      "type": "debugpy", "request": "launch", "console": "integratedTerminal",
+      "program": "${workspaceFolder}/h2a.py", "args": ["status", "--watch"], "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "h2a: list all runs",
+      "type": "debugpy", "request": "launch", "console": "integratedTerminal",
+      "program": "${workspaceFolder}/h2a.py", "args": ["list"], "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "h2a: S-parameters of latest run",
+      "type": "debugpy", "request": "launch", "console": "integratedTerminal",
+      "program": "${workspaceFolder}/h2a.py", "args": ["sparams"], "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "h2a: stop latest run",
+      "type": "debugpy", "request": "launch", "console": "integratedTerminal",
+      "program": "${workspaceFolder}/h2a.py", "args": ["stop"], "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "h2a: resume latest run",
+      "type": "debugpy", "request": "launch", "console": "integratedTerminal",
+      "program": "${workspaceFolder}/h2a.py", "args": ["resume"], "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "h2a: convert + run an HFSS project (asks for file and grid)",
+      "type": "debugpy", "request": "launch", "console": "integratedTerminal",
+      "program": "${workspaceFolder}/h2a.py", "cwd": "${workspaceFolder}",
+      "args": ["go", "${input:aedt}", "--design", "${input:design}", "--name", "${input:name}",
+               "--dx", "${input:dx}", "--dy", "${input:dx}", "--dz", "${input:dz}", "--ns", "${input:ns}"]
+    }
+  ],
+  "inputs": [
+    {"id": "aedt", "type": "promptString", "description": "HFSS project (.aedt) full path",
+     "default": "C:\\Users\\abhij\\Documents\\Ansoft\\"},
+    {"id": "design", "type": "promptString", "description": "HFSS design name inside the project"},
+    {"id": "name", "type": "promptString", "description": "name for this run (folder under runs\\)"},
+    {"id": "dx", "type": "promptString", "description": "in-plane cell size dx = dy (um)", "default": "20"},
+    {"id": "dz", "type": "promptString", "description": "vertical cell size dz (um), <= film thickness / 2", "default": "2.5"},
+    {"id": "ns", "type": "promptString", "description": "simulated time (ns)", "default": "3"}
+  ]
+}

@@ -1,0 +1,4 @@
+numpy
+matplotlib
+PySide6        # desktop app (h2a_gui.pyw); not needed for the command line
+# pyaedt       # only for `h2a.py export` on a machine with a licensed Ansys HFSS
